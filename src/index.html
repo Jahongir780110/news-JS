@@ -6,16 +6,26 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge" />
         <title>NewsPortal</title>
     </head>
+
     <body>
         <header>
             <h1>News Portal</h1>
         </header>
+
         <main>
             <div class="sources buttons"></div>
             <div class="news"></div>
         </main>
+
         <footer>
-            <p class="copyright">Copyright <a href="https://newsapi.org">NewsAPI</a></p>
+            <span class="copyright">Copyright <a href="https://newsapi.org">NewsAPI</a></span>
+            <a href="https://github.com/Jahongir780110" class="github">
+                <img src="<%= require('./assets/github.svg') %>" alt="github icon" width="30" height="30" />
+            </a>
+            <span class="date">Jul-2022</span>
+            <a href="https://rs.school/js-en/" class="course-logo">
+                <img src="<%= require('./assets/rs-logo.svg') %>" alt="course logo" width="60" />
+            </a>
         </footer>
 
         <template id="sourceItemTemp">

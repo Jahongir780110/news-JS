@@ -1,13 +1,16 @@
-import { IRespParams } from './types';
+type IRespParams = {
+    endpoint: string;
+    options?: { sources?: string };
+};
 
 class Loader {
     constructor(public baseLink: string, public options: { apiKey: string }) {}
 
-    getResp({ endpoint, options = {} }: IRespParams) {
-        return this.load('GET', endpoint, options);
+    getResp<T>({ endpoint, options = {} }: IRespParams): Promise<T | undefined> {
+        return this.load<T>('GET', endpoint, options);
     }
 
-    errorHandler(res: Response) {
+    errorHandler(res: Response): Response {
         if (!res.ok) {
             if (res.status === 401 || res.status === 404)
                 console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
@@ -17,17 +20,17 @@ class Loader {
         return res;
     }
 
-    makeUrl(options: { sources?: string }, endpoint: string) {
-        const urlOptions = new URLSearchParams({ ...this.options, ...options });
-        const url = new URL(`${this.baseLink}${endpoint}`);
+    makeUrl(options: { sources?: string }, endpoint: string): URL {
+        const urlOptions: URLSearchParams = new URLSearchParams({ ...this.options, ...options });
+        const url: URL = new URL(`${this.baseLink}${endpoint}`);
 
         url.search = urlOptions.toString();
         return url;
     }
 
-    async load(method: string, endpoint: string, options = {}) {
+    async load<T>(method: string, endpoint: string, options = {}): Promise<T | undefined> {
         try {
-            let res = await fetch(this.makeUrl(options, endpoint), { method });
+            let res: Response = await fetch(this.makeUrl(options, endpoint), { method });
             res = this.errorHandler(res);
             return await res.json();
         } catch (err) {

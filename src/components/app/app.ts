@@ -1,18 +1,25 @@
 import AppController from '../controller/controller';
 import AppView from '../view/appView';
-import { INews, ISource } from '../controller/types';
+import { INews, ISource } from 'src/types';
 
 class App {
-    public controller = new AppController();
-    public view = new AppView();
+    private controller: AppController = new AppController();
+    private view: AppView = new AppView();
 
-    async start() {
-        document.querySelector('.sources')?.addEventListener('click', async (e) => {
-            const data: INews = await this.controller.getNews(e);
-            this.view.drawNews(data);
-        });
-        const data: ISource = await this.controller.getSources();
-        this.view.drawSources(data);
+    async start(): Promise<void> {
+        document.querySelector('.sources')?.addEventListener(
+            'click',
+            async (e: Event): Promise<void> => {
+                const data: INews | undefined = await this.controller.getNews(e);
+                if (data) {
+                    this.view.drawNews(data);
+                }
+            }
+        );
+        const data: ISource | undefined = await this.controller.getSources();
+        if (data) {
+            this.view.drawSources(data);
+        }
     }
 }
 

@@ -32,8 +32,3 @@ export interface INews {
     totalResults: number;
     articles: INewsData[];
 }
-
-export interface IRespParams {
-    endpoint: string;
-    options?: { sources?: string };
-}
