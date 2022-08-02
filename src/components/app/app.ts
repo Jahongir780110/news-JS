@@ -10,12 +10,26 @@ class App {
         document.querySelector('.sources')?.addEventListener(
             'click',
             async (e: Event): Promise<void> => {
-                const data: INews | undefined = await this.controller.getNews(e);
-                if (data) {
-                    this.view.drawNews(data);
+                const currentTarget = e.currentTarget as HTMLElement;
+                const target = e.target as HTMLElement;
+
+                if (
+                    target.classList.contains('source__item') ||
+                    target.parentElement?.classList.contains('source__item')
+                ) {
+                    const sourceId =
+                        target.getAttribute('data-source-id') || target.parentElement?.getAttribute('data-source-id');
+                    if (sourceId === currentTarget.getAttribute('data-source')) return;
+
+                    currentTarget.setAttribute('data-source', sourceId || '');
+                    const data: INews | undefined = await this.controller.getNews(sourceId || '');
+                    if (data) {
+                        this.view.drawNews(data);
+                    }
                 }
             }
         );
+
         const data: ISource | undefined = await this.controller.getSources();
         if (data) {
             this.view.drawSources(data);

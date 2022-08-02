@@ -30,9 +30,8 @@ class Loader {
 
     async load<T>(method: string, endpoint: string, options = {}): Promise<T | undefined> {
         try {
-            let res: Response = await fetch(this.makeUrl(options, endpoint), { method });
-            res = this.errorHandler(res);
-            return await res.json();
+            const res: Response = await fetch(this.makeUrl(options, endpoint), { method });
+            return await this.errorHandler(res).json();
         } catch (err) {
             console.error(err);
         }
