@@ -1,13 +1,17 @@
-type IRespParams = {
+type configs = {
     endpoint: string;
     options?: { sources?: string };
 };
 
+enum Methods {
+    GET = 'GET',
+}
+
 class Loader {
     constructor(public baseLink: string, public options: { apiKey: string }) {}
 
-    getResp<T>({ endpoint, options = {} }: IRespParams): Promise<T | undefined> {
-        return this.load<T>('GET', endpoint, options);
+    getResp<T>({ endpoint, options = {} }: configs): Promise<T | undefined> {
+        return this.load<T>(Methods.GET, endpoint, options);
     }
 
     errorHandler(res: Response): Response {
@@ -28,7 +32,7 @@ class Loader {
         return url;
     }
 
-    async load<T>(method: string, endpoint: string, options = {}): Promise<T | undefined> {
+    async load<T>(method: Methods, endpoint: string, options = {}): Promise<T | undefined> {
         try {
             const res: Response = await fetch(this.makeUrl(options, endpoint), { method });
             return await this.errorHandler(res).json();

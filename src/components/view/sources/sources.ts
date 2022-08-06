@@ -9,22 +9,22 @@ enum Selectors {
     dataId = 'data-source-id',
 }
 
+const drawSourceElement = (item: ISourceData, fragment: DocumentFragment, template: HTMLTemplateElement) => {
+    const sourceClone = template.content.cloneNode(true) as HTMLElement;
+    const name = sourceClone.querySelector(Selectors.name) as Element;
+
+    sourceClone.querySelector(Selectors.item)?.setAttribute(Selectors.dataId, item.id);
+    name.textContent = item.name;
+
+    fragment.append(sourceClone);
+};
+
 class Sources {
     draw(data: ISourceData[]) {
-        const fragment: DocumentFragment = document.createDocumentFragment();
-        const sourceItemTemp: HTMLTemplateElement | null = document.querySelector(Selectors.temp);
+        const fragment = document.createDocumentFragment() as DocumentFragment;
+        const sourceItemTemp = document.querySelector(Selectors.temp) as HTMLTemplateElement;
 
-        data.forEach((item) => {
-            const sourceClone = sourceItemTemp?.content.cloneNode(true) as HTMLElement;
-            const name: Element | null = sourceClone.querySelector(Selectors.name);
-
-            sourceClone.querySelector(Selectors.item)?.setAttribute(Selectors.dataId, item.id);
-            if (name) {
-                name.textContent = item.name;
-            }
-
-            fragment.append(sourceClone);
-        });
+        data.forEach((item) => drawSourceElement(item, fragment, sourceItemTemp));
 
         document.querySelector(Selectors.sources)?.append(fragment);
     }
