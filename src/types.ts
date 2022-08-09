@@ -32,3 +32,8 @@ export interface INews {
     totalResults: number;
     articles: INewsData[];
 }
+
+export const enum Endpoints {
+    SOURCES = 'sources',
+    EVERYTHING = 'everything',
+}

@@ -1,5 +1,7 @@
+import { Endpoints } from 'src/types';
+
 type configs = {
-    endpoint: string;
+    endpoint: Endpoints.EVERYTHING | Endpoints.SOURCES;
     options?: { sources?: string };
 };
 
@@ -24,7 +26,7 @@ class Loader {
         return res;
     }
 
-    makeUrl(options: { sources?: string }, endpoint: string): URL {
+    makeUrl(options: { sources?: string }, endpoint: Endpoints.EVERYTHING | Endpoints.SOURCES): URL {
         const urlOptions: URLSearchParams = new URLSearchParams({ ...this.options, ...options });
         const url: URL = new URL(`${this.baseLink}${endpoint}`);
 
@@ -32,7 +34,11 @@ class Loader {
         return url;
     }
 
-    async load<T>(method: Methods, endpoint: string, options = {}): Promise<T | undefined> {
+    async load<T>(
+        method: Methods,
+        endpoint: Endpoints.EVERYTHING | Endpoints.SOURCES,
+        options = {}
+    ): Promise<T | undefined> {
         try {
             const res: Response = await fetch(this.makeUrl(options, endpoint), { method });
             return await this.errorHandler(res).json();
